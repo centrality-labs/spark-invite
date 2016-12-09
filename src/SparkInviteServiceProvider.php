@@ -24,7 +24,6 @@ class SparkInviteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publish();
-        $this->registerBladeDirectives();
     }
 
     /**

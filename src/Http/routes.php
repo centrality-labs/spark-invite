@@ -1,3 +1,3 @@
 <?php
 
-$router->get('/invites/{code}', 'InviteoController@show')->name('invites');
+$router->get('/invites/{code}', 'InviteController@consume')->name('zinethq.sparkinvite.consume');
