@@ -16,7 +16,7 @@ class CreateUserInvitationsTable extends Migration
     public function up()
     {
         Schema::create('user_invitations', function (Blueprint $table) {
-            $table->string('id');
+            $table->increments('id');
             $table->integer('invitee_id')->nullable()->unsigned();
             $table->integer('referral_team_id')->unsigned();
             $table->integer('referral_user_id')->nullable()->unsigned();
@@ -26,12 +26,11 @@ class CreateUserInvitationsTable extends Migration
             $table->timestamps();
 
             // Indexes
-            $table->primary('id');
             $table->index('status');
             $table->unique('token');
-            $table->foreign('invitee_id')->references('id')->on(Spark::user()->table())->onDelete('cascade');
-            $table->foreign('referral_team_id')->references('id')->on(Spark::team()->table())->onDelete('cascade');
-            $table->foreign('referral_user_id')->references('id')->on(Spark::user()->table())->onDelete('cascade');
+            $table->foreign('invitee_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('referral_team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->foreign('referral_user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
