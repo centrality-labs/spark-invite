@@ -85,6 +85,6 @@ class SparkInviteServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['sparkinvite'];
+        return ['spark.invite'];
     }
 }
