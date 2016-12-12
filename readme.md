@@ -1,5 +1,23 @@
 # Spark Invite
 
+## Installation
+- Edit `config\app.php` to have:
+```php
+    ...
+    'providers' => [
+        ...
+        ZiNETHQ\SparkInvite\SparkInviteServiceProvider::class,
+        ...
+    ],
+    ...
+    'aliases' => [
+        ...
+        'SparkInvite' => ZiNETHQ\SparkInvite\Facades\SparkInvite::class,
+        ...
+    ],
+    ...
+```
+- Run the command:
 ```php
 php artisan vendor:publish --provider="ZiNETHQ\SparkInvite\SparkInviteServiceProvider"
 ```
