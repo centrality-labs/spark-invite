@@ -162,9 +162,9 @@ class Invitation extends Model
      * Fire Laravel event
      * @param  string $event event name
      */
-    private function publishEvent($event_key)
+    private function publishEvent($eventKey)
     {
-        Event::fire(config('sparkinvite.event.prefix').".{$event_key}", [
+        Event::fire(config('sparkinvite.event.prefix').".{$eventKey}", [
             'event' => $eventKey,
             'invitation' => $this
         ], false);
