@@ -17,7 +17,7 @@ class InviteController extends Controller
      */
     public function consume(Request $request, $token)
     {
-        $invitation = Invitation::byToken($token);
+        $invitation = Invitation::get($token);
 
         if (!$invitation) {
             return redirect('/')

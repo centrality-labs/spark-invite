@@ -25,7 +25,7 @@ class Invitation extends Model
     /**
      * Obtain an invitation by it's token
      */
-    public static function byToken($token)
+    public static function get($token)
     {
         return self::where('token', $token)->first();
     }
