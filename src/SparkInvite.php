@@ -3,11 +3,10 @@
 namespace ZiNETHQ\SparkInvite;
 
 use ZiNETHQ\SparkInvite\Models\Invitation;
+use Event;
 
 class SparkInvite
 {
-    private $instance = null;
-
     public function invite($referralTeam, $referralUser, $invitee)
     {
         $invitation = new Invitation();

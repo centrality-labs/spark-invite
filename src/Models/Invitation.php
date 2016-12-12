@@ -4,6 +4,7 @@ namespace ZiNETHQ\SparkInvite\Models;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Spark\Spark;
 use Carbon\Carbon;
+use Event;
 use Log;
 
 class Invitation extends Model
