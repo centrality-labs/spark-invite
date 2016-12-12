@@ -1,6 +1,6 @@
 {
     "name": "zinethq/spark-invite",
-    "description": "User invite system for Laravel Spark",
+    "description": "User invitation system for Laravel Spark",
     "keywords": ["team", "user", "laravel", "spark", "invite", "zinethq"],
     "license": "MIT",
     "authors": [
@@ -29,12 +29,6 @@
             "ZiNETHQ\\SparkInvite\\": "src/"
         }
     },
-        "repositories": [
-        {
-            "type": "composer",
-            "url": "https://spark-satis.laravel.com"
-        }
-    ],
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
