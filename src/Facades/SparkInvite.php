@@ -12,6 +12,6 @@ class SparkInvite extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'sparkinvite';
+        return 'spark.invite';
     }
 }

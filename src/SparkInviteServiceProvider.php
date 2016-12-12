@@ -38,10 +38,8 @@ class SparkInviteServiceProvider extends ServiceProvider
             'sparkinvite'
         );
 
-        $this->app->singleton('sparkinvite', function ($app) {
-            $auth = $app->make('Illuminate\Contracts\Auth\Guard');
-
-            return new SparkInvite($auth);
+        $this->app->singleton('spark.invite', function ($app) {
+            return new SparkInvite();
         });
     }
 

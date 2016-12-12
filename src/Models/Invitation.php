@@ -21,9 +21,12 @@ class Invitation extends Model
      */
     protected $table = 'user_invitations';
 
-    public static function byCode($code)
+    /**
+     * Obtain an invitation by it's token
+     */
+    public static function byToken($token)
     {
-        return self::where('code', $code)->first();
+        return self::where('token', $token)->first();
     }
 
     /**
@@ -50,11 +53,6 @@ class Invitation extends Model
         return $this->belongsTo(Spark::userModel(), 'invitee_id');
     }
 
-    public function validate($email)
-    {
-        return strtolower($this->invitee()->email) === strtolower($email);
-    }
-
     public function cancel()
     {
         if ($this->isExpired()) {
@@ -67,7 +65,11 @@ class Invitation extends Model
         }
 
         $this->status = self::STATUS_CANCEL;
+        $this->token = null;
+        $this->old_password = null;
         $this->save();
+
+        $this->publishEvent('cancelled');
 
         return true;
     }
@@ -83,11 +85,41 @@ class Invitation extends Model
             return false;
         }
 
-        Auth::guard()->login($this->invitee());
-        $this->status = self::STATUS_SUCCESSFUL;
-        $this->save();
+        $this->publishEvent('accepted');
 
-        return true;
+        // Auth::guard()->login($this->invitee());
+
+        return Password::broker()->createToken($this->invitee);
+    }
+
+    /*
+    |----------------------------------------------------------------------
+    | Accessors
+    |----------------------------------------------------------------------
+    */
+    public function getStatusAttribute($status)
+    {
+        if ($status === self::STATUS_PENDING) {
+            if ($this->old_password && $this->invitee->password !== $this->old_password) {
+                $this->attributes['status'] = self::STATUS_SUCCESSFUL;
+                $this->attributes['token'] = null;
+                $this->attributes['old_password'] = null;
+                $this->save();
+                $this->publishEvent('successful');
+                return $this->attributes['status'];
+            }
+
+            if (Carbon::now()->diffInHours($this->created_at) >= config('sparkinvite.expires')) {
+                $this->attributes['status'] = self::STATUS_EXPIRED;
+                $this->attributes['token'] = null;
+                $this->attributes['old_password'] = null;
+                $this->save();
+                $this->publishEvent('expired');
+                return $this->attributes['status'];
+            }
+        }
+
+        return $status;
     }
 
     /*
@@ -105,10 +137,10 @@ class Invitation extends Model
     public function __call($method, $arguments = array())
     {
         // Handle isStatus() methods
-        if (starts_with($method, 'is') && $method !== 'is' && $method !== 'isStatus') {
+        if (starts_with($method, 'is') && $method !== 'is') {
             $status = strtolower(substr($method, 2));
 
-            return $this->isStatus($status);
+            return $this->status === $status;
         }
 
         return parent::__call($method, $arguments);
@@ -119,18 +151,15 @@ class Invitation extends Model
     | Private Methods
     |----------------------------------------------------------------------
     */
-    private function isStatus($status)
+
+    /**
+     * Fire Laravel event
+     * @param  string $event event name
+     * @return self
+     */
+    private function publishEvent($event)
     {
-        if ($this->status === $status) {
-            return true;
-        }
-
-        if ($this->status === self::STATUS_PENDING && Carbon::now()->diffInHours($this->created_at) >= config('sparkinvite.expires')) {
-            $this->status = self::STATUS_EXPIRED;
-            $this->save();
-            return $status === self::STATUS_EXPIRED;
-        }
-
-        return false;
+        Event::fire(config('sparkinvite.event.prefix').".{$event}", $this, false);
+        return $this;
     }
 }

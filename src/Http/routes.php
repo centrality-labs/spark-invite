@@ -1,3 +1,3 @@
 <?php
 
-$router->get('/invites/{code}', 'InviteController@consume')->name('zinethq.sparkinvite.consume');
+$router->get('/invites/{token}', 'InviteController@consume')->name('zinethq.sparkinvite.consume');

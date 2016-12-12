@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use ZiNETHQ\SparkInvite\Invitation;
 
+use SparkInvite;
+
 class InviteController extends Controller
 {
     /**
@@ -13,20 +15,43 @@ class InviteController extends Controller
      *
      * @return Response
      */
-    public function consume(Request $request, $code)
+    public function consume(Request $request, $token)
     {
-        $invitation = Invitation::byCode($code);
+        $invitation = Invitation::byToken($token);
 
         if (!$invitation) {
-            return redirect('/')->with('status', 'Not a valid invitation!');
+            return redirect('/')
+                ->with($this->getMessage('invalid-token'));
         }
 
-        if (!$invitation->isPending()) {
-            return redirect('/')->with('status', 'Invitation it not valid!');
+        if ($invitation->isCancelled()) {
+            return redirect('/')
+                ->with($this->getMessage('cancelled'));
         }
 
-        $token;
+        if ($invitation->isExpired()) {
+            if (config('sparkinvite.reissue-on-expiry')) {
+                SparkInvite::reissue($invitation);
+            }
+            return redirect('/')
+                ->with($this->getMessage('expired'));
+        }
 
-        return redirect("/password/reset/{$token}");
+        $token = $invitation->accept();
+
+        // return redirect("/password/reset/{$token}");
+        // Route name is password.reset
+
+        return view('spark::auth.passwords.reset')
+                ->with(['token' => $token, 'email' => $invitation->invitee->email]);
+    }
+
+    private function getMessage($key)
+    {
+        return [
+            config('sparkinvite.flash') => collect([
+                config('sparkinvite.messages.{$key}')
+            ])
+        ];
     }
 }
