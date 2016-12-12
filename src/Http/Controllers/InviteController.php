@@ -4,7 +4,7 @@ namespace ZiNETHQ\SparkInvite\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use ZiNETHQ\SparkInvite\Invitation;
+use ZiNETHQ\SparkInvite\Models\Invitation;
 
 use SparkInvite;
 
