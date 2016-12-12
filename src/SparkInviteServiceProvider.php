@@ -1,9 +1,10 @@
 <?php
 namespace ZiNETHQ\SparkInvite;
 
-use Blade;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+
+use Carbon\Carbon;
 
 use ZiNETHQ\SparkInvite\SparkInvite;
 
