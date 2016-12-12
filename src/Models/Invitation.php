@@ -31,6 +31,14 @@ class Invitation extends Model
     }
 
     /**
+     * Obtain an invitation by it's token
+     */
+    public static function getByUser($invitee)
+    {
+        return self::where('invitee_id', $invitee->id)->first();
+    }
+
+    /**
      * Referral User
      */
     public function referralUser()
@@ -92,34 +100,27 @@ class Invitation extends Model
         return Password::broker()->createToken($this->invitee);
     }
 
-    /*
-    |----------------------------------------------------------------------
-    | Accessors
-    |----------------------------------------------------------------------
-    */
-    public function getStatusAttribute($status)
+    public function validateStatus()
     {
         if ($status === self::STATUS_PENDING) {
             if ($this->old_password && $this->invitee->password !== $this->old_password) {
-                $this->attributes['status'] = self::STATUS_SUCCESSFUL;
-                $this->attributes['token'] = null;
-                $this->attributes['old_password'] = null;
+                $this->status = self::STATUS_SUCCESSFUL;
+                $this->token = null;
+                $this->old_password = null;
                 $this->save();
                 $this->publishEvent('successful');
-                return $this->attributes['status'];
+                return;
             }
 
             if (Carbon::now()->diffInHours($this->created_at) >= config('sparkinvite.expires')) {
-                $this->attributes['status'] = self::STATUS_EXPIRED;
-                $this->attributes['token'] = null;
-                $this->attributes['old_password'] = null;
+                $this->status = self::STATUS_EXPIRED;
+                $this->token = null;
+                $this->old_password = null;
                 $this->save();
                 $this->publishEvent('expired');
-                return $this->attributes['status'];
+                return;
             }
         }
-
-        return $status;
     }
 
     /*
@@ -139,6 +140,8 @@ class Invitation extends Model
         // Handle isStatus() methods
         if (starts_with($method, 'is') && $method !== 'is') {
             $status = strtolower(substr($method, 2));
+
+            $this->validateStatus();
 
             return $this->status === $status;
         }

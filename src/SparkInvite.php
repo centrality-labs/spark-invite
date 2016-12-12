@@ -10,6 +10,11 @@ class SparkInvite
 {
     public function invite($referralTeam, $referralUser, $invitee, $event = 'invite')
     {
+        $invitation = Invitation::getByUser($invitee);
+        if ($invitation) {
+            $invitation->validateStatus();
+            return $invitation;
+        }
         $invitation = new Invitation();
         $invitation->referralTeam()->associate($referralTeam);
         $invitation->referralUser()->associate($referralUser);
