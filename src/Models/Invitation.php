@@ -6,6 +6,7 @@ use Laravel\Spark\Spark;
 use Carbon\Carbon;
 use Event;
 use Log;
+use Password;
 
 class Invitation extends Model
 {
