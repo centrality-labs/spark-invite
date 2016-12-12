@@ -66,7 +66,6 @@ class Invitation extends Model
         }
 
         $this->status = self::STATUS_CANCEL;
-        $this->token = null;
         $this->old_password = null;
         $this->save();
 
