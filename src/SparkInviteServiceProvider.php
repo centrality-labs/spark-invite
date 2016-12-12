@@ -24,6 +24,7 @@ class SparkInviteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publish();
+        $this->loadRoutesFrom(realpath(__DIR__.'/Http/routes.php'));
     }
 
     /**
