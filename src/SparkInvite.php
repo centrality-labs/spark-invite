@@ -34,7 +34,6 @@ class SparkInvite
     /**
      * Fire Laravel event
      * @param  string $event event name
-     * @return self
      */
     private function publishEvent($eventKey, $invitation = null)
     {
@@ -42,6 +41,5 @@ class SparkInvite
             'event' => $eventKey,
             'invitation' => $invitation
         ], false);
-        return $this;
     }
 }

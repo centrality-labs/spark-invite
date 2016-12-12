@@ -155,7 +155,6 @@ class Invitation extends Model
     /**
      * Fire Laravel event
      * @param  string $event event name
-     * @return self
      */
     private function publishEvent($event_key)
     {
@@ -163,6 +162,5 @@ class Invitation extends Model
             'event' => $eventKey,
             'invitation' => $this
         ], false);
-        return $this;
     }
 }
