@@ -157,9 +157,12 @@ class Invitation extends Model
      * @param  string $event event name
      * @return self
      */
-    private function publishEvent($event)
+    private function publishEvent($event_key)
     {
-        Event::fire(config('sparkinvite.event.prefix').".{$event}", [ $this ], false);
+        Event::fire(config('sparkinvite.event.prefix').".{$event_key}", [
+            'event' => $eventKey,
+            'invitation' => $this
+        ], false);
         return $this;
     }
 }

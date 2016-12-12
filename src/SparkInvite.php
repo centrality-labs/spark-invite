@@ -36,9 +36,12 @@ class SparkInvite
      * @param  string $event event name
      * @return self
      */
-    private function publishEvent($event, $invitation = null)
+    private function publishEvent($eventKey, $invitation = null)
     {
-        Event::fire(config('sparkinvite.event.prefix').".{$event}", [ $invitation ], false);
+        Event::fire(config('sparkinvite.event.prefix').".{$eventKey}", [
+            'event' => $eventKey,
+            'invitation' => $invitation
+        ], false);
         return $this;
     }
 }
