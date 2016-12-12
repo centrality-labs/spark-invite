@@ -102,7 +102,7 @@ class Invitation extends Model
 
     public function validateStatus()
     {
-        if ($status === self::STATUS_PENDING) {
+        if ($this->status === self::STATUS_PENDING) {
             if ($this->old_password && $this->invitee->password !== $this->old_password) {
                 $this->status = self::STATUS_SUCCESSFUL;
                 $this->token = null;
