@@ -17,7 +17,7 @@ class SparkInvite
         $invitation->old_password = $invitee->password;
         $invitation->save();
 
-        $invitation->token = Uuid::generate(5, $invitation->id, Uuid::NS_OID);
+        $invitation->token = Uuid::generate(5, $invitation->id, Uuid::NS_OID)->toString();
         $invitation->save();
 
         $this->publishEvent($event, $invitation);
