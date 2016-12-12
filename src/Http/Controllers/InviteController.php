@@ -39,11 +39,7 @@ class InviteController extends Controller
 
         $token = $invitation->accept();
 
-        // return redirect("/password/reset/{$token}");
-        // Route name is password.reset
-
-        return view('spark::auth.passwords.reset')
-                ->with(['token' => $token, 'email' => $invitation->invitee->email]);
+        return redirect("/password/reset/{$token}");
     }
 
     private function getMessage($key)
