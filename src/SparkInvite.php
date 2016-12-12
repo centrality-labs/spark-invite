@@ -15,6 +15,7 @@ class SparkInvite
             $invitation->validateStatus();
             return $invitation;
         }
+
         $invitation = new Invitation();
         $invitation->referralTeam()->associate($referralTeam);
         $invitation->referralUser()->associate($referralUser);

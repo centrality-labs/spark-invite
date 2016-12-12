@@ -15,12 +15,15 @@ class Invitation extends Model
     const STATUS_EXPIRED = 'expired';
     const STATUS = [ self::STATUS_PENDING, self::STATUS_SUCCESSFUL, self::STATUS_CANCELLED, self::STATUS_EXPIRED ];
 
+    public $timestamps = true;
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'user_invitations';
+    protected $with = ['referralTeam', 'referralUser', 'invitee'];
 
     /**
      * Obtain an invitation by it's token
@@ -39,19 +42,19 @@ class Invitation extends Model
     }
 
     /**
-     * Referral User
-     */
-    public function referralUser()
-    {
-        return $this->belongsTo(Spark::userModel(), 'referral_user_id');
-    }
-
-    /**
      * Referral Team
      */
     public function referralTeam()
     {
         return $this->belongsTo(Spark::teamModel(), 'referral_team_id');
+    }
+
+    /**
+     * Referral User
+     */
+    public function referralUser()
+    {
+        return $this->belongsTo(Spark::userModel(), 'referral_user_id');
     }
 
     /**
