@@ -12,7 +12,7 @@ class Invitation extends Model
     const STATUS_SUCCESSFUL =  'successful';
     const STATUS_CANCELLED = 'canceled';
     const STATUS_EXPIRED = 'expired';
-    const STATUS = [ STATUS_PENDING, STATUS_SUCCESSFUL, STATUS_CANCELLED, STATUS_EXPIRED ];
+    const STATUS = [ self::STATUS_PENDING, self::STATUS_SUCCESSFUL, self::STATUS_CANCELLED, self::STATUS_EXPIRED ];
 
     /**
      * The table associated with the model.
