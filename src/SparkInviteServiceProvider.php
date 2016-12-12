@@ -24,7 +24,7 @@ class SparkInviteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publish();
-        $this->loadRoutesFrom(realpath(__DIR__.'/Http/routes.php'));
+        $this->routes();
     }
 
     /**
@@ -77,6 +77,17 @@ class SparkInviteServiceProvider extends ServiceProvider
         return [
             'create_user_invitations_table',
         ];
+    }
+
+    protected function routes()
+    {
+        Route::group([
+            'namespace'  => 'ZiNETHQ\SparkInvite\Http\Controllers',
+            'as' => 'zinethq.sparkinvite.',
+            'middleware' => [ 'web' ],
+        ], function ($router) {
+            require realpath(__DIR__.'/Http/routes.php');
+        });
     }
 
     /**

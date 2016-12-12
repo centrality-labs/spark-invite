@@ -1,3 +1,3 @@
 <?php
 
-Route::get('/invites/{token}', 'InviteController@consume')->name('zinethq.sparkinvite.consume');
+Route::get('/invites/{token}', ['uses' => 'InviteController@consume', 'as' => 'consume']);
