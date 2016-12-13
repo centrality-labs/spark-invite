@@ -80,7 +80,7 @@ class Invitation extends Model
      */
     public static function getByReferralTeam($referralTeam, $status = null)
     {
-        return self::getByParticipant('referral_team_id', $referralTeam->id, $status)->latest();
+        return self::getByParticipant('referral_team_id', $referralTeam->id, $status);
     }
 
     /**
@@ -88,7 +88,7 @@ class Invitation extends Model
      */
     public static function getByReferralUser($referralUser, $status = null)
     {
-        return self::getByParticipant('referral_user_id', $referralUser->id, $status)->latest();
+        return self::getByParticipant('referral_user_id', $referralUser->id, $status);
     }
 
     /**
@@ -96,7 +96,7 @@ class Invitation extends Model
      */
     public static function getByInvitee($invitee, $status = null)
     {
-        return self::getByParticipant('invitee_id', $invitee->id, $status)->latest();
+        return self::getByParticipant('invitee_id', $invitee->id, $status);
     }
 
     /**
