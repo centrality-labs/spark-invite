@@ -131,6 +131,14 @@ class Invitation extends Model
         return $this->hasMany(InvitationStatus::class, 'invitation_id')->latest();
     }
 
+    /**
+     * Current Status
+     */
+    public function status()
+    {
+        return $this->auditLog()->first();
+    }
+
     // Issue this invitation, may be performed automatically
     public function issue($auditTeam = null, $auditUser = null, $notes = null)
     {
@@ -193,11 +201,11 @@ class Invitation extends Model
     */
 
     /**
-     * Current Status
+     * Current Status Attribute
      */
     public function getStatusAttribute()
     {
-        return $this->auditLog()->first();
+        return $this->status();
     }
 
     /*
