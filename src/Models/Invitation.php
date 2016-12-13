@@ -131,6 +131,14 @@ class Invitation extends Model
         return $this->hasMany(InvitationStatus::class, 'invitation_id')->latest();
     }
 
+    /**
+     * Current Status
+     */
+    public function status()
+    {
+        return $this->auditLog->first();
+    }
+
     // Issue this invitation, may be performed automatically
     public function issue($auditTeam = null, $auditUser = null, $notes = null)
     {
@@ -169,11 +177,11 @@ class Invitation extends Model
 
     public function validate()
     {
-        if (!$this->status) {
+        if (!$this->status()) {
             return;
         }
 
-        if ($this->status->state === self::STATUS_ISSUED) {
+        if ($this->status()->state === self::STATUS_ISSUED) {
             if ($this->old_password && $this->invitee->password !== $this->old_password) {
                 $this->setStatus(self::STATUS_SUCCESSFUL, null, null, 'Automated check');
                 $this->cleanup();
@@ -181,7 +189,7 @@ class Invitation extends Model
                 return;
             }
 
-            if (Carbon::now()->diffInHours($this->status->created_at) >= config('sparkinvite.expires')) {
+            if (Carbon::now()->diffInHours($this->status()->created_at) >= config('sparkinvite.expires')) {
                 $this->setStatus(self::STATUS_EXPIRED, null, null, 'Automated check');
                 $this->cleanup();
                 $this->publishEvent(self::STATUS_EXPIRED);
@@ -201,7 +209,7 @@ class Invitation extends Model
      */
     public function getStatusAttribute()
     {
-        return $this->auditLog->first();
+        return $this->status();
     }
 
     /*
@@ -227,9 +235,9 @@ class Invitation extends Model
             return false;
         }
 
-        if ($this->status) {
+        if ($this->status()) {
             $this->validate();
-            switch ($this->status->state) {
+            switch ($this->status()->state) {
                 case self::STATUS_PENDING:
                     // OK to change, break and continue
                     break;
@@ -306,8 +314,8 @@ class Invitation extends Model
 
             if (in_array($status, self::STATUS)) {
                 $this->validate();
-                Log::info($this->status);
-                return $this->status && $this->status->state === $status;
+                dd($this->status());
+                return $this->status() && $this->status()->state === $status;
             }
         }
 
