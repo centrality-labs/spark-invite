@@ -6,18 +6,18 @@ abstract class InvitationListener
 {
     public function handle($event, $invitation)
     {
-        return call_user_func($event, $invitation);
+        return call_user_func(array($this, $event), $invitation);
     }
 
-    public abstract function pending($invitation);
+    abstract public function pending($invitation);
 
-    public abstract function issued($invitation);
+    abstract public function issued($invitation);
 
-    public abstract function successful($invitation);
+    abstract public function successful($invitation);
 
-    public abstract function revoked($invitation);
+    abstract public function revoked($invitation);
 
-    public abstract function rejected($invitation);
+    abstract public function rejected($invitation);
 
-    public abstract function expired($invitation);
+    abstract public function expired($invitation);
 }
