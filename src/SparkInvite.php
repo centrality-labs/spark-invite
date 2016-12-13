@@ -20,6 +20,8 @@ class SparkInvite
 
         $this->publishEvent($event, $invitation);
 
+        $invitation->setStatus(self::STATUS_PENDING, $referrerTeam, $referrer, null);
+
         return $invitation;
     }
 

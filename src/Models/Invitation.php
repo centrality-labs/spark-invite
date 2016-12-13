@@ -43,7 +43,7 @@ class Invitation extends Model
      * @var string
      */
     protected $table = 'user_invitations';
-    protected $with = ['referrerTeam', 'referrer', 'invitee', 'audit'];
+    protected $with = ['referrerTeam', 'referrer', 'invitee'];
     protected $appends = ['status'];
     protected $hidden = ['old_password'];
 
@@ -61,8 +61,7 @@ class Invitation extends Model
         $invitation->token = Uuid::generate(5, $invitation->id, Uuid::NS_OID)->string;
         $invitation->save();
 
-        // Set its status
-        $invitation->setStatus(self::STATUS_PENDING, $referrerTeam, $referrer, null);
+        // Log::info($status);
 
         return $invitation;
     }
@@ -190,37 +189,7 @@ class Invitation extends Model
         }
     }
 
-    /*
-    |----------------------------------------------------------------------
-    | Attributes
-    |----------------------------------------------------------------------
-    */
-
-    /**
-     * Status Attribute
-     */
-    public function getStatusAttribute()
-    {
-        return $this->audit->first();
-    }
-
-    /*
-    |----------------------------------------------------------------------
-    | Private Methods
-    |----------------------------------------------------------------------
-    */
-    private static function getByParticipant($column, $id, $status = null)
-    {
-        $query = self::where($column, $id);
-
-        if ($status) {
-            $query->where('status', $status);
-        }
-
-        return $query->latest()->get();
-    }
-
-    private function setStatus($status, $team = null, $user = null, $notes = null)
+    public function setStatus($status, $team = null, $user = null, $notes = null)
     {
         if (!in_array($status, self::STATUS)) {
             Log::error("Status {$status} is not valid.");
@@ -265,6 +234,36 @@ class Invitation extends Model
         $this->publishEvent($status);
 
         return $current;
+    }
+
+    /*
+    |----------------------------------------------------------------------
+    | Attributes
+    |----------------------------------------------------------------------
+    */
+
+    /**
+     * Status Attribute
+     */
+    public function getStatusAttribute()
+    {
+        return $this->audit()->first();
+    }
+
+    /*
+    |----------------------------------------------------------------------
+    | Private Methods
+    |----------------------------------------------------------------------
+    */
+    private static function getByParticipant($column, $id, $status = null)
+    {
+        $query = self::where($column, $id);
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->latest()->get();
     }
 
     private function cleanup()
