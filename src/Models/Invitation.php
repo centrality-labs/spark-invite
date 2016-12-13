@@ -62,7 +62,7 @@ class Invitation extends Model
         $invitation->save();
 
         // Set its status
-        InvitationStatus::make($invitation, self::STATUS_PENDING, $referralTeam, $referralUser, null);
+        $invitation->setStatus(self::STATUS_PENDING, $referralTeam, $referralUser, null);
 
         return $invitation;
     }
@@ -177,7 +177,11 @@ class Invitation extends Model
 
     public function validate()
     {
-        if ($this->status->state && $this->status()->state === self::STATUS_ISSUED) {
+        if (!$this->status()) {
+            return;
+        }
+
+        if ($this->status()->state === self::STATUS_ISSUED) {
             if ($this->old_password && $this->invitee->password !== $this->old_password) {
                 $this->setStatus(self::STATUS_SUCCESSFUL, null, null, 'Automated check');
                 $this->cleanup();
@@ -185,7 +189,7 @@ class Invitation extends Model
                 return;
             }
 
-            if (Carbon::now()->diffInHours($this->status->created_at) >= config('sparkinvite.expires')) {
+            if (Carbon::now()->diffInHours($this->status()->created_at) >= config('sparkinvite.expires')) {
                 $this->setStatus(self::STATUS_EXPIRED, null, null, 'Automated check');
                 $this->cleanup();
                 $this->publishEvent(self::STATUS_EXPIRED);
@@ -231,18 +235,19 @@ class Invitation extends Model
             return false;
         }
 
-        $this->validate();
-
-        switch ($this->status()->state) {
-            case self::STATUS_PENDING:
-                // OK to change, break and continue
-                break;
-            case self::STATUS_ISSUED:
-                // OK to change, break and continue
-                break;
-            default:
-                // Log::warning("Cannot change the status of invitation {$this->id} for user {$this->invitee_id} from {$this->status()->state} to {$status}.");
-                return false;
+        if ($this->status()) {
+            $this->validate();
+            switch ($this->status()->state) {
+                case self::STATUS_PENDING:
+                    // OK to change, break and continue
+                    break;
+                case self::STATUS_ISSUED:
+                    // OK to change, break and continue
+                    break;
+                default:
+                    // Log::warning("Cannot change the status of invitation {$this->id} for user {$this->invitee_id} from {$this->status()->state} to {$status}.");
+                    return false;
+            }
         }
 
         $current = InvitationStatus::make($this, $status, $auditTeam, $auditUser, $notes);
