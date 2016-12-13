@@ -136,7 +136,7 @@ class Invitation extends Model
      */
     public function status()
     {
-        return $this->auditLog()->first();
+        return $this->auditLog->first();
     }
 
     // Issue this invitation, may be performed automatically
@@ -177,7 +177,7 @@ class Invitation extends Model
 
     public function validate()
     {
-        if ($this->status()->state === self::STATUS_ISSUED) {
+        if ($this->status->state && $this->status()->state === self::STATUS_ISSUED) {
             if ($this->old_password && $this->invitee->password !== $this->old_password) {
                 $this->setStatus(self::STATUS_SUCCESSFUL, null, null, 'Automated check');
                 $this->cleanup();
