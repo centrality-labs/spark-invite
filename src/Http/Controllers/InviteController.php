@@ -40,9 +40,12 @@ class InviteController extends Controller
         // Ensure logged out otherwise this wont work...
         Auth::logout();
 
-        $token = $invitation->accept();
-
-        return redirect("/password/reset/{$token}")->with('email', $invitation->invitee->email);
+        // $token = $invitation->accept();
+        // return redirect("/password/reset/{$token}")->with('email', $invitation->invitee->email);
+        return redirect()->route('password.reset', [
+            'token' => $invitation->accept(),
+            'email' => $invitation->invitee->email
+        ]);
     }
 
     private function getMessage($key)
