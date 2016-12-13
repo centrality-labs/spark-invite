@@ -35,6 +35,7 @@ return [
 
     'messages' => [
         'invalid-token' => 'Not a valid invitation!',
+        'pending' => 'Invitation is pending approval. Try again later.',
         'expired' => 'Invitation has expired, a new one has been issued. Please check your email.',
         'revoked' => 'Your invitation was revoked and can no longer be used.',
         'rejected' => 'Your invitation has been rejected.'

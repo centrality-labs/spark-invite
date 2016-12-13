@@ -24,6 +24,11 @@ class InviteController extends Controller
                 ->with($this->getMessage('invalid-token'));
         }
 
+        if ($invitation->isPending()) {
+            return redirect('/')
+                ->with($this->getMessage('pending'));
+        }
+
         if ($invitation->isRevoked()) {
             return redirect('/')
                 ->with($this->getMessage('revoked'));
