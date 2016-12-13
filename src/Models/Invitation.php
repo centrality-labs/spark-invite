@@ -7,6 +7,7 @@ use Laravel\Spark\Spark;
 use Carbon\Carbon;
 
 use ZiNETHQ\SparkInvite\Models\InvitationStatus;
+use Webpatser\Uuid\Uuid as Uuid;
 
 use Auth;
 use Event;

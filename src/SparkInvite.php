@@ -3,7 +3,6 @@
 namespace ZiNETHQ\SparkInvite;
 
 use ZiNETHQ\SparkInvite\Models\Invitation;
-use Webpatser\Uuid\Uuid as Uuid;
 use Event;
 
 class SparkInvite
