@@ -169,7 +169,7 @@ class Invitation extends Model
 
     public function validate()
     {
-        if ($this->status->state === self::STATUS_ISSUED) {
+        if ($this->status()->state === self::STATUS_ISSUED) {
             if ($this->old_password && $this->invitee->password !== $this->old_password) {
                 $this->setStatus(self::STATUS_SUCCESSFUL, null, null, 'Automated check');
                 $this->cleanup();
@@ -225,7 +225,7 @@ class Invitation extends Model
 
         $this->validate();
 
-        switch ($this->status->state) {
+        switch ($this->status()->state) {
             case self::STATUS_PENDING:
                 // OK to change, break and continue
                 break;
@@ -233,7 +233,7 @@ class Invitation extends Model
                 // OK to change, break and continue
                 break;
             default:
-                // Log::warning("Cannot change the status of invitation {$this->id} for user {$this->invitee_id} from {$this->status->state} to {$status}.");
+                // Log::warning("Cannot change the status of invitation {$this->id} for user {$this->invitee_id} from {$this->status()->state} to {$status}.");
                 return false;
         }
 
@@ -301,7 +301,7 @@ class Invitation extends Model
 
             if (in_array($status, self::STATUS)) {
                 $this->validate();
-                return $this->status->state === $status;
+                return $this->status()->state === $status;
             }
         }
 
