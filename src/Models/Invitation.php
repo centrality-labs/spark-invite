@@ -35,11 +35,27 @@ class Invitation extends Model
     }
 
     /**
-     * Obtain an invitation by it's token
+     * Obtain invitations by their referral team
      */
-    public static function getByUser($invitee)
+    public static function getByReferalTeam($referalTeam)
     {
-        return self::where('invitee_id', $invitee->id)->first();
+        return self::where('referal_team_id', $referalTeam->id)->latest()->get();
+    }
+
+    /**
+     * Obtain invitation by their referral team
+     */
+    public static function getByReferalUser($referalUser)
+    {
+        return self::where('referal_user_id', $referalUser->id)->latest()->get();
+    }
+
+    /**
+     * Obtain invitations by their invitee
+     */
+    public static function getByInvitee($invitee)
+    {
+        return self::where('invitee_id', $invitee->id)->latest()->get();
     }
 
     /**

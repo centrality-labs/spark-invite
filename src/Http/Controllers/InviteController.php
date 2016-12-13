@@ -4,9 +4,9 @@ namespace ZiNETHQ\SparkInvite\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use ZiNETHQ\SparkInvite\SparkInvite;
 use ZiNETHQ\SparkInvite\Models\Invitation;
-
-use SparkInvite;
+use Auth;
 
 class InviteController extends Controller
 {
@@ -37,9 +37,12 @@ class InviteController extends Controller
                 ->with($this->getMessage('expired'));
         }
 
+        // Ensure logged out otherwise this wont work...
+        Auth::logout();
+
         $token = $invitation->accept();
 
-        return redirect("/password/reset/{$token}");
+        return redirect("/password/reset/{$token}")->with('email', $invitation->invitee->email);
     }
 
     private function getMessage($key)
