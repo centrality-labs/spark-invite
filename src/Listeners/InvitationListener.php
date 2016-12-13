@@ -13,6 +13,8 @@ abstract class InvitationListener
 
     abstract public function issued($invitation);
 
+    abstract public function accepted($invitation);
+
     abstract public function successful($invitation);
 
     abstract public function revoked($invitation);

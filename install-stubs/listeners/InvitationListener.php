@@ -16,6 +16,11 @@ class InvitationListener extends Listener
         return;
     }
 
+    public function accepted($invitation)
+    {
+        return;
+    }
+
     public function successful($invitation)
     {
         return;
