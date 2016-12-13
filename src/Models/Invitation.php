@@ -313,8 +313,11 @@ class Invitation extends Model
             $status = strtolower(substr($method, 2));
 
             if (in_array($status, self::STATUS)) {
+                if (!$this->status()) {
+                    return false;
+                }
                 $this->validate();
-                return $this->status() && $this->status()->state === $status;
+                return  $this->status()->state === $status;
             }
         }
 
