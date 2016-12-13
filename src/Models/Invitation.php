@@ -25,6 +25,7 @@ class Invitation extends Model
      */
     protected $table = 'user_invitations';
     protected $with = ['referralTeam', 'referralUser', 'invitee'];
+    protected $hidden = ['old_password'];
 
     /**
      * Obtain an invitation by it's token
