@@ -38,25 +38,36 @@ class Invitation extends Model
     /**
      * Obtain invitations by their referral team
      */
-    public static function getByReferalTeam($referalTeam)
+    public static function getByReferralTeam($referralTeam, $status = null)
     {
-        return self::where('referal_team_id', $referalTeam->id)->latest()->get();
+        return self::getByParticipant('referral_team_id', $referralTeam->id, $status);
     }
 
     /**
      * Obtain invitation by their referral team
      */
-    public static function getByReferalUser($referalUser)
+    public static function getByReferralUser($referralUser, $status = null)
     {
-        return self::where('referal_user_id', $referalUser->id)->latest()->get();
+        return self::getByParticipant('referral_user_id', $referralUser->id, $status);
     }
 
     /**
      * Obtain invitations by their invitee
      */
-    public static function getByInvitee($invitee)
+    public static function getByInvitee($invitee, $status = null)
     {
-        return self::where('invitee_id', $invitee->id)->latest()->get();
+        return self::getByParticipant('invitee_id', $invitee->id, $status);
+    }
+
+    protected static function getByParticipant($column, $id, $status = null)
+    {
+        $query = self::where($column, $id);
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->latest()->get();
     }
 
     /**
