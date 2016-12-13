@@ -43,7 +43,8 @@ class Invitation extends Model
      * @var string
      */
     protected $table = 'user_invitations';
-    protected $with = ['referralTeam', 'referralUser', 'invitee'];
+    protected $with = ['referralTeam', 'referralUser', 'invitee', 'auditLog'];
+    protected $appends = ['status'];
     protected $hidden = ['old_password'];
 
     public static function make($referralTeam, $referralUser, $invitee)
@@ -130,14 +131,6 @@ class Invitation extends Model
         return $this->hasMany(InvitationStatus::class, 'invitation_id')->latest();
     }
 
-    /**
-     * Current Status
-     */
-    public function status()
-    {
-        return $this->hasMany(InvitationStatus::class, 'invitation_id')->latest()->limit(1);
-    }
-
     // Issue this invitation, may be performed automatically
     public function issue($auditTeam = null, $auditUser = null, $notes = null)
     {
@@ -191,6 +184,20 @@ class Invitation extends Model
                 return;
             }
         }
+    }
+
+    /*
+    |----------------------------------------------------------------------
+    | Attributes
+    |----------------------------------------------------------------------
+    */
+
+    /**
+     * Current Status
+     */
+    public function getStatusAttribute()
+    {
+        return $this->auditLog()->first();
     }
 
     /*
