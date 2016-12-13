@@ -314,7 +314,6 @@ class Invitation extends Model
 
             if (in_array($status, self::STATUS)) {
                 $this->validate();
-                dd($this->status());
                 return $this->status() && $this->status()->state === $status;
             }
         }
