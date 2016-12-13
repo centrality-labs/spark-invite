@@ -9,6 +9,10 @@ abstract class InvitationListener
         return call_user_func(array($this, $event), $invitation);
     }
 
+    abstract public function invite($invitation);
+
+    abstract public function reinvite($invitation);
+
     abstract public function pending($invitation);
 
     abstract public function issued($invitation);
