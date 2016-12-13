@@ -43,16 +43,16 @@ class Invitation extends Model
      * @var string
      */
     protected $table = 'user_invitations';
-    protected $with = ['referralTeam', 'referralUser', 'invitee', 'auditLog'];
+    protected $with = ['referrerTeam', 'referrer', 'invitee', 'audit'];
     protected $appends = ['status'];
     protected $hidden = ['old_password'];
 
-    public static function make($referralTeam, $referralUser, $invitee)
+    public static function make($referrerTeam, $referrer, $invitee)
     {
         // Make the invitation
         $invitation = new Invitation();
-        $invitation->referralTeam()->associate($referralTeam);
-        $invitation->referralUser()->associate($referralUser);
+        $invitation->referrerTeam()->associate($referrerTeam);
+        $invitation->referrer()->associate($referrer);
         $invitation->invitee()->associate($invitee);
         $invitation->old_password = $invitee->password;
         $invitation->save();
@@ -62,7 +62,7 @@ class Invitation extends Model
         $invitation->save();
 
         // Set its status
-        $invitation->setStatus(self::STATUS_PENDING, $referralTeam, $referralUser, null);
+        $invitation->setStatus(self::STATUS_PENDING, $referrerTeam, $referrer, null);
 
         return $invitation;
     }
@@ -76,19 +76,19 @@ class Invitation extends Model
     }
 
     /**
-     * Obtain invitations by their referral team
+     * Obtain invitations by their referrer team
      */
-    public static function getByReferralTeam($referralTeam, $status = null)
+    public static function getByReferrerTeam($referrerTeam, $status = null)
     {
-        return self::getByParticipant('referral_team_id', $referralTeam->id, $status);
+        return self::getByParticipant('team_id', $referrerTeam->id, $status);
     }
 
     /**
-     * Obtain invitation by their referral team
+     * Obtain invitation by their referrer team
      */
-    public static function getByReferralUser($referralUser, $status = null)
+    public static function getByReferrer($referrer, $status = null)
     {
-        return self::getByParticipant('referral_user_id', $referralUser->id, $status);
+        return self::getByParticipant('user_id', $referrer->id, $status);
     }
 
     /**
@@ -100,19 +100,19 @@ class Invitation extends Model
     }
 
     /**
-     * Referral Team
+     * Referrer Team
      */
-    public function referralTeam()
+    public function referrerTeam()
     {
-        return $this->belongsTo(Spark::teamModel(), 'referral_team_id');
+        return $this->belongsTo(Spark::teamModel(), 'team_id');
     }
 
     /**
-     * Referral User
+     * Referrer
      */
-    public function referralUser()
+    public function referrer()
     {
-        return $this->belongsTo(Spark::userModel(), 'referral_user_id');
+        return $this->belongsTo(Spark::userModel(), 'user_id');
     }
 
     /**
@@ -126,28 +126,20 @@ class Invitation extends Model
     /**
      * Status list
      */
-    public function auditLog()
+    public function audit()
     {
         return $this->hasMany(InvitationStatus::class, 'invitation_id')->latest();
     }
 
-    /**
-     * Current Status
-     */
-    public function status()
-    {
-        return $this->auditLog->first();
-    }
-
     // Issue this invitation, may be performed automatically
-    public function issue($auditTeam = null, $auditUser = null, $notes = null)
+    public function issue($team = null, $user = null, $notes = null)
     {
         if (!$this->isPending()) {
             // Log::warning("Attempted to accept an invitation for user {$this->invitee_id} that has the {$this->status} status.");
             return false;
         }
 
-        return $this->setStatus(self::STATUS_ISSUED, $auditTeam, $auditUser, $notes);
+        return $this->setStatus(self::STATUS_ISSUED, $team, $user, $notes);
     }
 
     // Accept the invitation, this generates a password reset token but does not change the state of the invitation
@@ -170,18 +162,18 @@ class Invitation extends Model
     }
 
     // Revoke the invitation
-    public function revoke($auditTeam, $auditUser, $notes = null)
+    public function revoke($team, $user, $notes = null)
     {
-        return $this->setStatus(self::STATUS_REVOKED, $auditTeam, $auditUser, $notes);
+        return $this->setStatus(self::STATUS_REVOKED, $team, $user, $notes);
     }
 
     public function validate()
     {
-        if (!$this->status()) {
+        if (!$this->status) {
             return;
         }
 
-        if ($this->status()->state === self::STATUS_ISSUED) {
+        if ($this->status->state === self::STATUS_ISSUED) {
             if ($this->old_password && $this->invitee->password !== $this->old_password) {
                 $this->setStatus(self::STATUS_SUCCESSFUL, null, null, 'Automated check');
                 $this->cleanup();
@@ -189,7 +181,7 @@ class Invitation extends Model
                 return;
             }
 
-            if (Carbon::now()->diffInHours($this->status()->created_at) >= config('sparkinvite.expires')) {
+            if (Carbon::now()->diffInHours($this->status->created_at) >= config('sparkinvite.expires')) {
                 $this->setStatus(self::STATUS_EXPIRED, null, null, 'Automated check');
                 $this->cleanup();
                 $this->publishEvent(self::STATUS_EXPIRED);
@@ -205,11 +197,11 @@ class Invitation extends Model
     */
 
     /**
-     * Current Status Attribute
+     * Status Attribute
      */
     public function getStatusAttribute()
     {
-        return $this->status();
+        return $this->audit->first();
     }
 
     /*
@@ -228,16 +220,16 @@ class Invitation extends Model
         return $query->latest()->get();
     }
 
-    private function setStatus($status, $auditTeam = null, $auditUser = null, $notes = null)
+    private function setStatus($status, $team = null, $user = null, $notes = null)
     {
         if (!in_array($status, self::STATUS)) {
             Log::error("Status {$status} is not valid.");
             return false;
         }
 
-        if ($this->status()) {
+        if ($this->status) {
             $this->validate();
-            switch ($this->status()->state) {
+            switch ($this->status->state) {
                 case self::STATUS_PENDING:
                     // OK to change, break and continue
                     break;
@@ -245,12 +237,12 @@ class Invitation extends Model
                     // OK to change, break and continue
                     break;
                 default:
-                    // Log::warning("Cannot change the status of invitation {$this->id} for user {$this->invitee_id} from {$this->status()->state} to {$status}.");
+                    // Log::warning("Cannot change the status of invitation {$this->id} for user {$this->invitee_id} from {$this->status->state} to {$status}.");
                     return false;
             }
         }
 
-        $current = InvitationStatus::make($this, $status, $auditTeam, $auditUser, $notes);
+        $current = InvitationStatus::make($this, $status, $team, $user, $notes);
 
         switch ($status) {
             case self::STATUS_SUCCESSFUL:
@@ -313,11 +305,11 @@ class Invitation extends Model
             $status = strtolower(substr($method, 2));
 
             if (in_array($status, self::STATUS)) {
-                if (!$this->status()) {
+                if (!$this->status) {
                     return false;
                 }
                 $this->validate();
-                return  $this->status()->state === $status;
+                return  $this->status->state === $status;
             }
         }
 
@@ -328,8 +320,8 @@ class Invitation extends Model
             if (in_array($status, self::STATUS)) {
                 return $this->setStatus(
                     $status,
-                    array_key_exists('auditTeam', $arguments) ? $arguments['auditTeam'] : null,
-                    array_key_exists('auditUser', $arguments) ? $arguments['auditUser'] : null,
+                    array_key_exists('team', $arguments) ? $arguments['team'] : null,
+                    array_key_exists('user', $arguments) ? $arguments['user'] : null,
                     array_key_exists('notes', $arguments) ? $arguments['notes'] : null
                 );
             }

@@ -18,8 +18,8 @@ class CreateInvitationStatusTable extends Migration
         Schema::create('invitation_status', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('invitation_id');
-            $table->unsignedInteger('audit_team_id')->nullable()->default(null);
-            $table->unsignedInteger('audit_user_id')->nullable()->default(null);
+            $table->unsignedInteger('team_id')->nullable()->default(null);
+            $table->unsignedInteger('user_id')->nullable()->default(null);
             $table->enum('state', Invitation::STATUS)->default(Invitation::STATUS_PENDING);
             $table->string('notes')->nullable();
             $table->timestamps();
@@ -27,8 +27,8 @@ class CreateInvitationStatusTable extends Migration
             // Indexes
             $table->index('state');
             $table->foreign('invitation_id')->references('id')->on('user_invitations')->onDelete('cascade');
-            $table->foreign('audit_team_id')->references('id')->on('teams')->onDelete('cascade');
-            $table->foreign('audit_user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

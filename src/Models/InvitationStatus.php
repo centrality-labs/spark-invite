@@ -11,13 +11,13 @@ class InvitationStatus extends Model
     public $timestamps = true;
     protected $table = 'invitation_status';
 
-    public static function make($invitation, $state, $auditTeam = null, $auditUser = null, $notes = null)
+    public static function make($invitation, $state, $team = null, $user = null, $notes = null)
     {
         $status = new InvitationStatus();
-        $status->state = $state;
         $status->invitation()->associate($invitation);
-        $status->auditTeam()->associate($auditTeam);
-        $status->auditUser()->associate($auditUser);
+        $status->state = $state;
+        $status->team()->associate($team);
+        $status->user()->associate($user);
         $status->notes = $notes;
         $status->save();
         return $status;
@@ -34,16 +34,16 @@ class InvitationStatus extends Model
     /**
      * Audit Team
      */
-    public function auditTeam()
+    public function team()
     {
-        return $this->belongsTo(Spark::teamModel(), 'audit_team_id');
+        return $this->belongsTo(Spark::teamModel(), 'team_id');
     }
 
     /**
      * Audit User
      */
-    public function auditUser()
+    public function user()
     {
-        return $this->belongsTo(Spark::userModel(), 'audit_user_id');
+        return $this->belongsTo(Spark::userModel(), 'user_id');
     }
 }

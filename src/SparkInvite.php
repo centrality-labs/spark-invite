@@ -7,7 +7,7 @@ use Event;
 
 class SparkInvite
 {
-    public function invite($referralTeam, $referralUser, $invitee, $event = 'invite')
+    public function invite($referrerTeam, $referrer, $invitee, $event = 'invite')
     {
         $invitations = Invitation::getByInvitee($invitee);
         if ($invitations->count() > 0) {
@@ -16,17 +16,17 @@ class SparkInvite
             return $invitation;
         }
 
-        $invitation = Invitation::make($referralTeam, $referralUser, $invitee);
+        $invitation = Invitation::make($referrerTeam, $referrer, $invitee);
 
         $this->publishEvent($event, $invitation);
 
         return $invitation;
     }
 
-    public function reinvite($invitation, $auditTeam = null, $auditUser = null, $notes = null)
+    public function reinvite($invitation, $team = null, $user = null, $notes = null)
     {
-        $invitation->revoke($auditTeam, $auditUser, $notes);
-        return $this->invite($invitation->referralTeam, $invitation->referralUser, $invitation->invitee, 'reinvite');
+        $invitation->revoke($team, $user, $notes);
+        return $this->invite($invitation->referrerTeam, $invitation->referrer, $invitation->invitee, 'reinvite');
     }
 
     /**
