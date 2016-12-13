@@ -13,29 +13,21 @@ class SparkInvite
         $invitations = Invitation::getByInvitee($invitee);
         if ($invitations->count() > 0) {
             $invitation = $invitations->first();
-            $invitation->validateStatus();
+            $invitation->validate();
             return $invitation;
         }
 
-        $invitation = new Invitation();
-        $invitation->referralTeam()->associate($referralTeam);
-        $invitation->referralUser()->associate($referralUser);
-        $invitation->invitee()->associate($invitee);
-        $invitation->old_password = $invitee->password;
-        $invitation->save();
-
-        $invitation->token = Uuid::generate(5, $invitation->id, Uuid::NS_OID)->string;
-        $invitation->save();
+        $invitation = Invitation::make($referralTeam, $referralUser, $invitee);
 
         $this->publishEvent($event, $invitation);
 
         return $invitation;
     }
 
-    public function reinvite($invitation)
+    public function reinvite($invitation, $auditTeam = null, $auditUser = null, $notes = null)
     {
-        $invitation->cancel();
-        return $this->invite($invitation->referralTeam, $invitation->referralUser, $invitation->invitee, 'reissue');
+        $invitation->revoke($auditTeam, $auditUser, $notes);
+        return $this->invite($invitation->referralTeam, $invitation->referralUser, $invitation->invitee, 'reinvite');
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace ZiNETHQ\SparkInvite\Traits;
 
 use ZiNETHQ\SparkInvite\Models\Invitation;
+use Exception;
 
 trait HasInvites
 {
@@ -16,47 +17,30 @@ trait HasInvites
     }
 
     /**
-     * return invitation by a user, by type
+     * return successful invitation for this user
+     * @return hasMany
+     */
+    public function wasInvited()
+    {
+        return $this->invitations()->count() > 0;
+    }
+
+    /**
+     * return invitation for this user, by status
      * @return hasMany
      */
     public function invitationsByStatus($status)
     {
-        return $this->invitations()->where('status', $status);
-    }
+        if (!in_array($status, self::STATUS)) {
+            throw new Exception("Status {$status} is not valid.");
+        }
 
-    /**
-     * return successful invitation by a user
-     * @return hasMany
-     */
-    public function invitationSuccess()
-    {
-        return $this->invitations()->where('status', Invitation::STATUS_SUCCESSFUL);
-    }
-
-    /**
-     * return expired invitations by a user
-     * @return hasMany
-     */
-    public function invitationExpired()
-    {
-        return $this->invitations()->where('status', Invitation::STATUS_EXPIRED);
-    }
-
-    /**
-     * return cancelled invitations by a user
-     * @return hasMany
-     */
-    public function invitationCancelled()
-    {
-        return $this->invitations()->where('status', Invitation::STATUS_CANCELLED);
-    }
-
-    /**
-     * return pending invitations by a user
-     * @return hasMany
-     */
-    public function invitationPending()
-    {
-        return $this->invitations()->where('status', Invitation::STATUS_PENDING);
+        return $this->invitations()->whereHas('status', function ($query) use ($status) {
+            if (is_array($status)) {
+                $query->whereIn('state', $status);
+            } else {
+                $query->where('state', $status);
+            }
+        });
     }
 }

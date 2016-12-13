@@ -11,11 +11,11 @@ use Auth;
 class InviteController extends Controller
 {
     /**
-     * Consume an invitation.
+     * Accept an invitation.
      *
      * @return Response
      */
-    public function consume(Request $request, $token)
+    public function accept(Request $request, $token)
     {
         $invitation = Invitation::get($token);
 
@@ -24,9 +24,14 @@ class InviteController extends Controller
                 ->with($this->getMessage('invalid-token'));
         }
 
-        if ($invitation->isCancelled()) {
+        if ($invitation->isRevoked()) {
             return redirect('/')
-                ->with($this->getMessage('cancelled'));
+                ->with($this->getMessage('revoked'));
+        }
+
+        if ($invitation->isRejected()) {
+            return redirect('/')
+                ->with($this->getMessage('rejected'));
         }
 
         if ($invitation->isExpired()) {
@@ -40,12 +45,27 @@ class InviteController extends Controller
         // Ensure logged out otherwise this wont work...
         Auth::logout();
 
-        // $token = $invitation->accept();
-        // return redirect("/password/reset/{$token}")->with('email', $invitation->invitee->email);
         return redirect()->route('password.reset', [
             'token' => $invitation->accept(),
             'email' => $invitation->invitee->email
         ]);
+    }
+
+    /**
+     * Reject an invitation.
+     *
+     * @return Response
+     */
+    public function reject(Request $request, $token)
+    {
+        $invitation = Invitation::get($token);
+
+        if ($invitation) {
+            $invitation->reject();
+        }
+
+        return redirect('/')
+                ->with($this->getMessage('rejected'));
     }
 
     private function getMessage($key)

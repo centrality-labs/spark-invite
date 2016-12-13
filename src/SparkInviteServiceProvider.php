@@ -63,7 +63,7 @@ class SparkInviteServiceProvider extends ServiceProvider
             $publishes["{$stubs}/database/migrations/{$migration}.php"] = $filename;
         }
         $publishes[realpath("{$stubs}/config")] = config_path();
-        // $publishes[realpath("{$stubs}/model")] = app_path();
+        $publishes[realpath("{$stubs}/listeners")] = app_path('Listeners');
 
         $this->publishes($publishes);
     }
@@ -77,6 +77,7 @@ class SparkInviteServiceProvider extends ServiceProvider
     {
         return [
             'create_user_invitations_table',
+            'create_invitation_status_table'
         ];
     }
 

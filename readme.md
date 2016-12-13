@@ -21,3 +21,14 @@
 ```php
 php artisan vendor:publish --provider="ZiNETHQ\SparkInvite\SparkInviteServiceProvider"
 ```
+-
+- Add the following to your `App\Providers\EventServiceProvider` class:
+```php
+    protected $listen = [
+        ...
+        'spark.invite.*' => [
+            'App\Listeners\InvitationListener',
+        ],
+        ...
+    ];
+```

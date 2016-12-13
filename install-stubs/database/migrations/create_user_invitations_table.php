@@ -20,13 +20,11 @@ class CreateUserInvitationsTable extends Migration
             $table->unsignedInteger('invitee_id')->nullable();
             $table->unsignedInteger('referral_team_id');
             $table->unsignedInteger('referral_user_id')->nullable();
-            $table->enum('status', Invitation::STATUS)->default(Invitation::STATUS_PENDING);
             $table->uuid('token')->nullable();
             $table->string('old_password', 60)->nullable();
             $table->timestamps();
 
             // Indexes
-            $table->index('status');
             $table->index('token');
             $table->foreign('invitee_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('referral_team_id')->references('id')->on('teams')->onDelete('cascade');
