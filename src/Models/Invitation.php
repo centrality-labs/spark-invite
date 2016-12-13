@@ -127,7 +127,7 @@ class Invitation extends Model
      */
     public function audit()
     {
-        return $this->hasMany(InvitationStatus::class, 'invitation_id');
+        return $this->hasMany(InvitationStatus::class, 'invitation_id')->orderBy('id', 'desc');
     }
 
     // Issue this invitation, may be performed automatically
