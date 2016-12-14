@@ -32,7 +32,7 @@ return [
         // rejected - The invitee has rejected the invitation
     ],
 
-    'flash' => 'alerts',
+    'flash' => 'alert',
 
     'messages' => [
         'invalid-token' => 'Not a valid invitation!',

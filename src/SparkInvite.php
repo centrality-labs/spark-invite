@@ -31,6 +31,16 @@ class SparkInvite
         return $this->invite($invitation->referrerTeam, $invitation->referrer, $invitation->invitee, 'reinvite');
     }
 
+    public function acceptLink($invitation)
+    {
+        return secure_url(str_replace('{token}', $invitation->token, config('sparkinvites.routes.accept')));
+    }
+
+    public function rejectLink($invitation)
+    {
+        return secure_url(str_replace('{token}', $invitation->token, config('sparkinvites.routes.reject')));
+    }
+
     /**
      * Fire Laravel event
      * @param  string $event event name
