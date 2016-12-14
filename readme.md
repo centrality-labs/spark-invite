@@ -48,12 +48,9 @@ Vue.component('alert', {
 
     computed: {
         title: function () {
-            if (!this.message) {
-                return;
-            }
-
             return sprintf('<strong>%s</strong>', _string.capitalize(this.message.type));
         },
+
         type: function () {
             switch (this.message.type) {
                 case 'error':
@@ -67,6 +64,21 @@ Vue.component('alert', {
                 default:
                     return 'danger';
             }
+        },
+
+        icon: function() {
+            switch (this.type) {
+                case 'danger':
+                    return 'fa fa-times-circle';
+                case 'warning':
+                    return 'fa fa-exclamation-triangle';
+                case 'success':
+                    return 'fa fa-check-circle';
+                case 'info':
+                    return 'fa fa-info-circle';
+                default:
+                    return 'fa fa-times-circle';
+            }
         }
     },
 
@@ -79,17 +91,17 @@ Vue.component('alert', {
             }
 
             $.notify({
-                icon: 'font-icon fa fa-times-circle',
+                icon: this.icon,
                 title: this.title,
                 message: this.message.content
             },{
-                type: this.message.type
+                type: this.type,
+                timer: 3000,
             });
         });
     }
 
 });
-
 ```
 When used like so on your view page:
 ```HTML
