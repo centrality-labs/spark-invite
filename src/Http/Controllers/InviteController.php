@@ -22,7 +22,7 @@ class InviteController extends Controller
 
         if (!$invitation) {
             return redirect($err)
-                ->with($this->getMessage('danger', 'invalid-token'));
+                ->with($this->getMessage('error', 'invalid-token'));
         }
 
         if ($invitation->isPending()) {
