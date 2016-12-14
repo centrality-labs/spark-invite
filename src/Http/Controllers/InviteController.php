@@ -80,7 +80,7 @@ class InviteController extends Controller
         return [
             config('sparkinvite.flash') => [
                 'type' => $type,
-                'content' => config('sparkinvite.messages.{$key}')
+                'content' => config("sparkinvite.messages.{$key}")
             ]
         ];
     }
