@@ -86,18 +86,16 @@ Vue.component('alert', {
 
     created: function () {
         this.$nextTick(function () {
-            if (!this.message) {
-                return;
+            if (this.message) {
+                $.notify({
+                    icon: this.icon,
+                    title: this.title,
+                    message: this.message.content
+                },{
+                    type: this.type,
+                    timer: 3000,
+                });
             }
-
-            $.notify({
-                icon: this.icon,
-                title: this.title,
-                message: this.message.content
-            },{
-                type: this.type,
-                timer: 3000,
-            });
         });
     }
 
