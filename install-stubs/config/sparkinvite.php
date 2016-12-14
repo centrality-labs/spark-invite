@@ -13,7 +13,8 @@ return [
 
     'routes' => [
         'accept' => '/invites/accept/{token}',
-        'reject' => '/invites/reject/{token}'
+        'reject' => '/invites/reject/{token}',
+        'on-error' => '/'
     ],
 
     'reissue-on-expiry' => true,
@@ -31,7 +32,7 @@ return [
         // rejected - The invitee has rejected the invitation
     ],
 
-    'flash' => 'errors',
+    'flash' => 'alerts',
 
     'messages' => [
         'invalid-token' => 'Not a valid invitation!',

@@ -18,33 +18,34 @@ class InviteController extends Controller
     public function accept(Request $request, $token)
     {
         $invitation = Invitation::get($token);
+        $err = config('sparkinvite.routes.on-error');
 
         if (!$invitation) {
-            return redirect('/')
-                ->with($this->getMessage('invalid-token'));
+            return redirect($err)
+                ->with($this->getMessage('error', 'invalid-token'));
         }
 
         if ($invitation->isPending()) {
-            return redirect('/')
-                ->with($this->getMessage('pending'));
+            return redirect($err)
+                ->with($this->getMessage('info', 'pending'));
         }
 
         if ($invitation->isRevoked()) {
-            return redirect('/')
-                ->with($this->getMessage('revoked'));
+            return redirect($err)
+                ->with($this->getMessage('warning', 'revoked'));
         }
 
         if ($invitation->isRejected()) {
-            return redirect('/')
-                ->with($this->getMessage('rejected'));
+            return redirect($err)
+                ->with($this->getMessage('info', 'rejected'));
         }
 
         if ($invitation->isExpired()) {
             if (config('sparkinvite.reissue-on-expiry')) {
                 SparkInvite::reissue($invitation);
             }
-            return redirect('/')
-                ->with($this->getMessage('expired'));
+            return redirect($err)
+                ->with($this->getMessage('info', 'expired'));
         }
 
         // Ensure logged out otherwise this wont work...
@@ -64,21 +65,23 @@ class InviteController extends Controller
     public function reject(Request $request, $token)
     {
         $invitation = Invitation::get($token);
+        $err = config('sparkinvite.routes.on-error');
 
         if ($invitation) {
             $invitation->reject();
         }
 
-        return redirect('/')
-                ->with($this->getMessage('rejected'));
+        return redirect($err)
+                ->with($this->getMessage('info', 'rejected'));
     }
 
-    private function getMessage($key)
+    private function getMessage($type, $key)
     {
         return [
-            config('sparkinvite.flash') => collect([
-                config('sparkinvite.messages.{$key}')
-            ])
+            config('sparkinvite.flash') => [
+                'type' => $type,
+                'content' => config('sparkinvite.messages.{$key}')
+            ]
         ];
     }
 }
