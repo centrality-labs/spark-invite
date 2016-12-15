@@ -86,7 +86,7 @@ class SparkInviteServiceProvider extends ServiceProvider
         Route::group([
             'namespace'  => 'ZiNETHQ\SparkInvite\Http\Controllers',
             'as' => 'zinethq.sparkinvite.',
-            'middleware' => [ 'web' ],
+            'middleware' => config('sparkinvite.routes.middleware'),
         ], function ($router) {
             require realpath(__DIR__.'/Http/routes.php');
         });

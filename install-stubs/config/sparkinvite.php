@@ -14,7 +14,8 @@ return [
     'routes' => [
         'accept' => '/invites/accept/{token}',
         'reject' => '/invites/reject/{token}',
-        'on-error' => '/'
+        'on-error' => '/',
+        'middleware' => [ 'web' ]
     ],
 
     'reissue-on-expiry' => true,
