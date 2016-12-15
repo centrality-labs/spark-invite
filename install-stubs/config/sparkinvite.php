@@ -15,7 +15,8 @@ return [
         'accept' => '/invites/accept/{token}',
         'reject' => '/invites/reject/{token}',
         'on-error' => '/',
-        'middleware' => [ 'web' ]
+        'middleware' => [ 'web' ],
+        'prefix' => 'zinethq.sparkinvite.'
     ],
 
     'reissue-on-expiry' => true,

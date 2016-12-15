@@ -3,6 +3,7 @@ namespace ZiNETHQ\SparkInvite;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use ZiNETHQ\SparkInvite\Console\Commands\ValidateInvitationsCommand;
 
 use Carbon\Carbon;
 
@@ -16,6 +17,10 @@ class SparkInviteServiceProvider extends ServiceProvider
      * @var bool
      */
     protected $defer = false;
+
+    protected $commands = [
+        ValidateInvitationsCommand::class,
+    ];
 
     /**
      * Boot the service provider
@@ -40,9 +45,11 @@ class SparkInviteServiceProvider extends ServiceProvider
             'sparkinvite'
         );
 
-        $this->app->singleton('spark.invite', function ($app) {
+        $this->app->singleton(SparkInvite::class, function ($app) {
             return new SparkInvite();
         });
+
+        $this->commands($this->commands);
     }
 
     /**
@@ -85,7 +92,7 @@ class SparkInviteServiceProvider extends ServiceProvider
     {
         Route::group([
             'namespace'  => 'ZiNETHQ\SparkInvite\Http\Controllers',
-            'as' => 'zinethq.sparkinvite.',
+            'as' => config('sparkinvite.routes.prefix'),
             'middleware' => config('sparkinvite.routes.middleware'),
         ], function ($router) {
             require realpath(__DIR__.'/Http/routes.php');
@@ -99,6 +106,6 @@ class SparkInviteServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['spark.invite'];
+        return [SparkInvite::class];
     }
 }
