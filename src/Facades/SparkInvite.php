@@ -2,6 +2,7 @@
 namespace ZiNETHQ\SparkInvite\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use ZiNETHQ\SparkInvite\SparkInvite as Invite;
 
 class SparkInvite extends Facade
 {
@@ -12,6 +13,6 @@ class SparkInvite extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'spark.invite';
+        return Invite::class;
     }
 }
