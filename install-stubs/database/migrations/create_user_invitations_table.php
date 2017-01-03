@@ -22,6 +22,7 @@ class CreateUserInvitationsTable extends Migration
             $table->unsignedInteger('user_id')->nullable();
             $table->uuid('token')->nullable();
             $table->string('old_password', 60)->nullable();
+            $table->json('data')->nullable();
             $table->timestamps();
 
             // Indexes

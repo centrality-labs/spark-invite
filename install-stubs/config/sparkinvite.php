@@ -11,6 +11,27 @@ return [
     */
     'expires' => 48,
 
+    /*
+    |--------------------------------------------------------------------------
+    | User models
+    |--------------------------------------------------------------------------
+    |
+    | Specify the local model classes.
+    |
+    */
+    'models'  => [
+        'invitation' => 'App\\Invitation',
+        'invitationstatus' => 'App\\InvitationStatus',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Routes
+    |--------------------------------------------------------------------------
+    |
+    | Settings for package routes
+    |
+    */
     'routes' => [
         'accept' => '/invites/accept/{token}',
         'reject' => '/invites/reject/{token}',
@@ -19,8 +40,26 @@ return [
         'prefix' => 'zinethq.sparkinvite.'
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Expired behaviour
+    |--------------------------------------------------------------------------
+    |
+    | When the user uses an expired invitation, should the package automatically reissue that invitation.
+    | That is, a soft- (true) or hard-expiry (false)
+    |
+    */
     'reissue-on-expiry' => true,
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Events
+    |--------------------------------------------------------------------------
+    |
+    | What prefix to use for event names. Default to spark.invite, but can be customized.
+    |
+    */
     'event' => [
         'prefix' => 'spark.invite'
         // Available events are:
@@ -34,8 +73,17 @@ return [
         // rejected - The invitee has rejected the invitation
     ],
 
-    'flash' => 'alert',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Alerts
+    |--------------------------------------------------------------------------
+    |
+    | How messages are communicated when redirecting the user with errors (e.g.).
+    | 'flash' dictates the name of the variable and the messages are the text to be displayed per type of event.
+    |
+    */
+    'flash' => 'alert',
     'messages' => [
         'invalid-token' => 'Not a valid invitation!',
         'pending' => 'Invitation is pending approval. Try again later.',

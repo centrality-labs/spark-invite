@@ -7,6 +7,16 @@ use Event;
 
 class SparkInvite
 {
+    public static function invitationModel()
+    {
+        return config('sparkinvite.models.invitation');
+    }
+
+    public static function invitationStatusModel()
+    {
+        return config('sparkinvite.models.invitationstatus');
+    }
+
     public function invite($referrerTeam, $referrer, $invitee, $event = 'invite')
     {
         $invitations = Invitation::getByInvitee($invitee);

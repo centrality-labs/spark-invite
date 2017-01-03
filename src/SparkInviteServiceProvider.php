@@ -71,6 +71,7 @@ class SparkInviteServiceProvider extends ServiceProvider
         }
         $publishes[realpath("{$stubs}/config")] = config_path();
         $publishes[realpath("{$stubs}/listeners")] = app_path('Listeners');
+        $publishes[realpath("{$stubs}/models")] = app_path();
 
         $this->publishes($publishes);
     }
