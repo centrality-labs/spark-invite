@@ -4,7 +4,8 @@ namespace ZiNETHQ\SparkInvite\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Spark\Spark;
-use ZiNETHQ\SparkInvite\Models\Invitation;
+
+use ZiNETHQ\SparkInvite\SparkInvite;
 
 class InvitationStatus extends Model
 {
@@ -28,7 +29,7 @@ class InvitationStatus extends Model
      */
     public function invitation()
     {
-        return $this->belongsTo(Invitation::class, 'invitation_id');
+        return $this->belongsTo(SparkInvite::invitationModel(), 'invitation_id');
     }
 
     /**

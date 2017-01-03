@@ -2,7 +2,6 @@
 
 namespace ZiNETHQ\SparkInvite;
 
-use ZiNETHQ\SparkInvite\Models\Invitation;
 use Event;
 
 class SparkInvite
@@ -17,20 +16,21 @@ class SparkInvite
         return config('sparkinvite.models.invitationstatus');
     }
 
-    public function invite($referrerTeam, $referrer, $invitee, $event = 'invite')
+    public function invite($referrerTeam, $referrer, $invitee, $data = null, $event = 'invite')
     {
-        $invitations = Invitation::getByInvitee($invitee);
+        $model = self::invitationModel();
+        $invitations = $model::getByInvitee($invitee);
         if ($invitations->count() > 0) {
             $invitation = $invitations->first();
             $invitation->validate();
             return $invitation;
         }
 
-        $invitation = Invitation::make($referrerTeam, $referrer, $invitee);
+        $invitation = $model::make($referrerTeam, $referrer, $invitee, $data);
 
         $this->publishEvent($event, $invitation);
 
-        $invitation->setStatus(Invitation::STATUS_PENDING, $referrerTeam, $referrer, null);
+        $invitation->setStatus($model::STATUS_PENDING, $referrerTeam, $referrer, null);
 
         return $invitation;
     }
@@ -38,7 +38,7 @@ class SparkInvite
     public function reinvite($invitation, $team = null, $user = null, $notes = null)
     {
         $invitation->revoke($team, $user, $notes);
-        return $this->invite($invitation->referrerTeam, $invitation->referrer, $invitation->invitee, 'reinvite');
+        return $this->invite($invitation->referrerTeam, $invitation->referrer, $invitation->invitee, $invitation->data, 'reinvite');
     }
 
     public function acceptLink($invitation)

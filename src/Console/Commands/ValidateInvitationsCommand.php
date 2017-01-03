@@ -3,8 +3,7 @@
 namespace ZiNETHQ\SparkInvite\Console\Commands;
 
 use Illuminate\Console\Command;
-use ZiNETHQ\SparkInvite\Models\Invitation;
-use ZiNETHQ\SparkInvite\Models\InvitationStatus;
+use ZiNETHQ\SparkInvite\SparkInvite;
 
 class ValidateInvitationsCommand extends Command
 {
@@ -34,8 +33,9 @@ class ValidateInvitationsCommand extends Command
 
     public function handle()
     {
-        $invitations = Invitation::whereHas('status', function ($query) {
-             $query->where('state', Invitation::STATUS_PENDING);
+        $model = SparkInvite::invitationModel();
+        $invitations = $model::whereHas('status', function ($query) {
+             $query->where('state', $model::STATUS_PENDING);
         })->get();
 
         foreach ($invitations as $invitation) {

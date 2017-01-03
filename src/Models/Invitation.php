@@ -5,9 +5,9 @@ namespace ZiNETHQ\SparkInvite\Models;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Spark\Spark;
 use Carbon\Carbon;
-
-use ZiNETHQ\SparkInvite\Models\InvitationStatus;
 use Webpatser\Uuid\Uuid as Uuid;
+
+use ZiNETHQ\SparkInvite\SparkInvite;
 
 use Auth;
 use Event;
@@ -47,7 +47,7 @@ class Invitation extends Model
     protected $appends = ['status'];
     protected $hidden = ['old_password'];
 
-    public static function make($referrerTeam, $referrer, $invitee)
+    public static function make($referrerTeam, $referrer, $invitee, $data = null)
     {
         // Make the invitation
         $invitation = new Invitation();
@@ -55,6 +55,7 @@ class Invitation extends Model
         $invitation->referrer()->associate($referrer);
         $invitation->invitee()->associate($invitee);
         $invitation->old_password = $invitee->password;
+        $invitation->data = $data;
         $invitation->save();
 
         // Generate its token
@@ -127,7 +128,7 @@ class Invitation extends Model
      */
     public function audit()
     {
-        return $this->hasMany(InvitationStatus::class, 'invitation_id')->orderBy('id', 'desc');
+        return $this->hasMany(SparkInvite::invitationStatusModel(), 'invitation_id')->orderBy('id', 'desc');
     }
 
     // Issue this invitation, may be performed automatically
