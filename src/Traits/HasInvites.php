@@ -3,6 +3,7 @@
 namespace ZiNETHQ\SparkInvite\Traits;
 
 use ZiNETHQ\SparkInvite\Models\Invitation;
+use ZiNETHQ\SparkInvite\SparkInvite;
 use Exception;
 
 trait HasInvites
@@ -22,7 +23,7 @@ trait HasInvites
      */
     public function sparkInvites()
     {
-        return $this->hasMany(Invitation::class);
+        return $this->hasMany(SparkInvite::invitationModel());
     }
 
     /**
