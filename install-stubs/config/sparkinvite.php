@@ -20,8 +20,8 @@ return [
     |
     */
     'models'  => [
-        'invitation' => 'App\Invitation',
-        'invitation-status' => 'App\InvitationStatus',
+        'invitation' => 'App\\Invitation',
+        'invitation-status' => 'App\\InvitationStatus',
     ],
 
     /*
