@@ -8,12 +8,12 @@ class SparkInvite
 {
     public static function invitationModel()
     {
-        return config('sparkinvite.models.invitation');
+        return config('sparkinvite.models.invitation', 'App\Invitation');
     }
 
     public static function invitationStatusModel()
     {
-        return config('sparkinvite.models.invitationstatus');
+        return config('sparkinvite.models.invitation-status', 'App\InvitationStatus');
     }
 
     public function invite($referrerTeam, $referrer, $invitee, $data = null, $event = 'invite')

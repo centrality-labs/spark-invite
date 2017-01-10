@@ -21,7 +21,7 @@ return [
     */
     'models'  => [
         'invitation' => 'App\Invitation',
-        'invitationstatus' => 'App\InvitationStatus',
+        'invitation-status' => 'App\InvitationStatus',
     ],
 
     /*
