@@ -44,4 +44,23 @@ trait HasInvites
             }
         });
     }
+
+    /**
+     * return invitation for this user, by status
+     * @return hasMany
+     */
+    public function sparkInvitesByExcludedStatus($status)
+    {
+        if (!in_array($status, self::STATUS)) {
+            throw new Exception("Status {$status} is not valid.");
+        }
+
+        return $this->sparkInvites()->whereDoesntHave('status', function ($query) use ($status) {
+            if (is_array($status)) {
+                $query->whereIn('state', $status);
+            } else {
+                $query->where('state', $status);
+            }
+        });
+    }
 }
