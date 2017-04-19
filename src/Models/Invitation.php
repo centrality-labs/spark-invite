@@ -256,12 +256,14 @@ class Invitation extends Model
     | Private Methods
     |----------------------------------------------------------------------
     */
-    private static function getByParticipant($column, $id, $status = null)
+    private static function getByParticipant($column, $id, $state = null)
     {
         $query = self::where($column, $id);
 
-        if ($status) {
-            $query->where('status', $status);
+        if ($state) {
+            $query->whereHas('status', function ($status) use ($state) {
+                $status->where('state', $state);
+            });
         }
 
         return $query->latest()->get();
