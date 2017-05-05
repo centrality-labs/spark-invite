@@ -21,7 +21,7 @@ class CreateInvitationStatusTable extends Migration
             $table->unsignedInteger('team_id')->nullable()->default(null);
             $table->unsignedInteger('user_id')->nullable()->default(null);
             $table->enum('state', Invitation::STATUS)->default(Invitation::STATUS_PENDING);
-            $table->string('notes')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
 
             // Indexes
