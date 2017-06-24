@@ -10,6 +10,11 @@ For example, within a system bulk creation of new user accounts may be required 
 - An invitation can expire, and either soft-expiry (allows for recovery of the invitation unless expired invitations are manually cleaned up) or hard-expiry (once an invitation has expired it cannot be used).
 
 ## Installation
+
+```
+composer require zinethq/spark-invite dev-master
+```
+
 - Edit `config\app.php` to have:
 ```php
     ...
