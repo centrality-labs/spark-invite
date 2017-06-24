@@ -15,7 +15,7 @@ For example, within a system bulk creation of new user accounts may be required 
 composer require zinethq/spark-invite dev-master
 ```
 
-- Edit `config\app.php` to have:
+Edit `config\app.php` to have:
 ```php
     ...
     'providers' => [
@@ -31,12 +31,13 @@ composer require zinethq/spark-invite dev-master
     ],
     ...
 ```
-- Run the command:
+
+Run the command:
 ```php
 php artisan vendor:publish --provider="ZiNETHQ\SparkInvite\SparkInviteServiceProvider"
 ```
--
-- Add the following to your `App\Providers\EventServiceProvider` class:
+
+Add the following to your `App\Providers\EventServiceProvider` class:
 ```php
     protected $listen = [
         ...
