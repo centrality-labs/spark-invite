@@ -10,7 +10,12 @@ For example, within a system bulk creation of new user accounts may be required 
 - An invitation can expire, and either soft-expiry (allows for recovery of the invitation unless expired invitations are manually cleaned up) or hard-expiry (once an invitation has expired it cannot be used).
 
 ## Installation
-- Edit `config\app.php` to have:
+1. Require in the package
+```
+composer require zinethq/spark-invite dev-master
+```
+
+2. Edit `config\app.php` to have:
 ```php
     ...
     'providers' => [
@@ -26,12 +31,21 @@ For example, within a system bulk creation of new user accounts may be required 
     ],
     ...
 ```
-- Run the command:
+
+3. Run the command:
 ```php
 php artisan vendor:publish --provider="ZiNETHQ\SparkInvite\SparkInviteServiceProvider"
 ```
--
-- Add the following to your `App\Providers\EventServiceProvider` class:
+This will publish the following files:
+- `/database/migrations/TIMESTAMP_create_user_invitations_table.php`
+- `/database/migrations/TIMESTAMP_create_invitation_status_table.php`
+- `/config/sparkinvite.php`
+- `/app/Listeners/InvitationListener.php`
+- `/app/InvitationStatus.php`
+
+4. Migrate the database
+
+5. Add the following to your `App\Providers\EventServiceProvider` class:
 ```php
     protected $listen = [
         ...
