@@ -43,12 +43,18 @@ class SparkInvite
 
     public function acceptLink($invitation)
     {
-        return secure_url(str_replace('{token}', $invitation->token, config('sparkinvites.routes.accept')));
+        if (config('sparkinvite.https', true)) {
+            return secure_url(str_replace('{token}', $invitation->token, config('sparkinvite.routes.accept')));
+        }
+        return url(str_replace('{token}', $invitation->token, config('sparkinvite.routes.accept')));
     }
 
     public function rejectLink($invitation)
     {
-        return secure_url(str_replace('{token}', $invitation->token, config('sparkinvites.routes.reject')));
+        if (config('sparkinvite.https', true)) {
+            return secure_url(str_replace('{token}', $invitation->token, config('sparkinvite.routes.reject')));
+        }
+        return url(str_replace('{token}', $invitation->token, config('sparkinvite.routes.reject')));
     }
 
     /**
