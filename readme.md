@@ -1,4 +1,5 @@
 # Spark Invite
+
 Spark Invite is designed for the use case where user account can been pre-populated, e.g. through information provided by a 3rd party, and an invitation needs to be sent so the prospective user can 'claim' their account.
 
 For example, within a system bulk creation of new user accounts may be required to ensure security, consistency and for convenience. Once a new user account has been created the SparkInvite package can be used to manage the process of the account being claimed. The stages are:
@@ -10,13 +11,16 @@ For example, within a system bulk creation of new user accounts may be required 
 - An invitation can expire, and either soft-expiry (allows for recovery of the invitation unless expired invitations are manually cleaned up) or hard-expiry (once an invitation has expired it cannot be used).
 
 ## Installation
-1. Require in the package
-```
-composer require zinethq/spark-invite dev-master
-```
 
-2. Edit `config\app.php` to have:
-```php
+1. Require in the package
+
+    ```bash
+    composer require zinethq/spark-invite dev-master
+    ```
+
+1. Edit `config\app.php` to have:
+
+    ```php
     ...
     'providers' => [
         ...
@@ -30,23 +34,26 @@ composer require zinethq/spark-invite dev-master
         ...
     ],
     ...
-```
+    ```
 
-3. Run the command:
-```php
-php artisan vendor:publish --provider="ZiNETHQ\SparkInvite\SparkInviteServiceProvider"
-```
-This will publish the following files:
-- `/database/migrations/TIMESTAMP_create_user_invitations_table.php`
-- `/database/migrations/TIMESTAMP_create_invitation_status_table.php`
-- `/config/sparkinvite.php`
-- `/app/Listeners/InvitationListener.php`
-- `/app/InvitationStatus.php`
+1. Run the command:
 
-4. Migrate the database
+    ```php
+    php artisan vendor:publish --provider="ZiNETHQ\SparkInvite\SparkInviteServiceProvider"
+    ```
 
-5. Add the following to your `App\Providers\EventServiceProvider` class:
-```php
+    This will publish the following files:
+    - `/database/migrations/TIMESTAMP_create_user_invitations_table.php`
+    - `/database/migrations/TIMESTAMP_create_invitation_status_table.php`
+    - `/config/sparkinvite.php`
+    - `/app/Listeners/InvitationListener.php`
+    - `/app/InvitationStatus.php`
+
+1. Migrate the database
+
+1. Add the following to your `App\Providers\EventServiceProvider` class:
+
+    ```php
     protected $listen = [
         ...
         'spark.invite.*' => [
@@ -54,10 +61,12 @@ This will publish the following files:
         ],
         ...
     ];
-```
+    ```
 
 ## Managing errors
+
 When there is an issue with a token, e.g. doesn't exist or has been revoked, the invitation controller redirects back to the route defined in the configuration setting `sparkinvites.routes.on-error`. When redirecting the user one of the `sparkinvites.messages` is passed under the variable name configured by `sparkinvite.flash`, which can be displayed in your view. For example, using Vue.js and Notify.js (plus underscore.string/lodash for capitalization and sprintf for string creation) the following component will do this:
+
 ```js
 Vue.component('alert', {
 
@@ -124,7 +133,9 @@ Vue.component('alert', {
 
 });
 ```
+
 When used like so on your view page:
+
 ```HTML
 <alert :message="{{ json_encode(session()->get('alert'), null) }}"></alert>
 ```
