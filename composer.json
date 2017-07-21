@@ -3,11 +3,10 @@
     "description": "User invitation system for Laravel Spark",
     "keywords": ["team", "user", "laravel", "spark", "invite", "zinethq"],
     "license": "MIT",
-    "authors": [
-        {
+    "authors": [{
             "name": "Jon Nicholson",
             "email": "jon.nicholson@zinethq.com",
-            "homepage": "http://www.zinethq.com",
+            "homepage": "http://www.drjonnicholson.com",
             "role": "Developer"
         },
         {
