@@ -46,6 +46,9 @@ class Invitation extends Model
     protected $with = ['referrerTeam', 'referrer', 'invitee'];
     protected $appends = ['status'];
     protected $hidden = ['old_password'];
+    protected $casts = [
+         'data' => 'array',
+    ];
 
     public static function make($referrerTeam, $referrer, $invitee, $data = null)
     {
