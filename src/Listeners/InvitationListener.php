@@ -4,9 +4,9 @@ namespace ZiNETHQ\SparkInvite\Listeners;
 
 abstract class InvitationListener
 {
-    public function handle($event, $data)
+    public function handle($event, $invitation)
     {
-        return call_user_func(array($this, $data['event']), $data['invitation']);
+        return call_user_func(array($this, $event), $invitation);
     }
 
     abstract public function invite($invitation);
