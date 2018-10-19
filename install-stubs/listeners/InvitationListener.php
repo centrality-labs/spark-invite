@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use ZiNETHQ\SparkInvite\Listeners\InvitationListener as Listener;
+use CentralityLabs\SparkInvite\Listeners\InvitationListener as Listener;
 
 class InvitationListener extends Listener
 {

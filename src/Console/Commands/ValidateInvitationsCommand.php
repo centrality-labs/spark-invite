@@ -1,9 +1,9 @@
 <?php
 
-namespace ZiNETHQ\SparkInvite\Console\Commands;
+namespace CentralityLabs\SparkInvite\Console\Commands;
 
 use Illuminate\Console\Command;
-use ZiNETHQ\SparkInvite\SparkInvite;
+use CentralityLabs\SparkInvite\SparkInvite;
 
 class ValidateInvitationsCommand extends Command
 {

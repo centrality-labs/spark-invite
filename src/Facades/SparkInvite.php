@@ -1,8 +1,8 @@
 <?php
-namespace ZiNETHQ\SparkInvite\Facades;
+namespace CentralityLabs\SparkInvite\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use ZiNETHQ\SparkInvite\SparkInvite as Invite;
+use CentralityLabs\SparkInvite\SparkInvite as Invite;
 
 class SparkInvite extends Facade
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace ZiNETHQ\SparkInvite;
+namespace CentralityLabs\SparkInvite;
 
 use Event;
 

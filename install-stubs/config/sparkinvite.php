@@ -37,7 +37,7 @@ return [
         'reject' => '/invites/reject/{token}',
         'on-error' => '/',
         'middleware' => [ 'web' ],
-        'prefix' => 'zinethq.sparkinvite.'
+        'prefix' => 'centrality-labs.sparkinvite.'
     ],
     
     /*

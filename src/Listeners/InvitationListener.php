@@ -1,6 +1,6 @@
 <?php
 
-namespace ZiNETHQ\SparkInvite\Listeners;
+namespace CentralityLabs\SparkInvite\Listeners;
 
 abstract class InvitationListener
 {

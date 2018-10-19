@@ -1,13 +1,13 @@
 <?php
 
-namespace ZiNETHQ\SparkInvite\Models;
+namespace CentralityLabs\SparkInvite\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Spark\Spark;
 use Carbon\Carbon;
 use Webpatser\Uuid\Uuid as Uuid;
 
-use ZiNETHQ\SparkInvite\SparkInvite;
+use CentralityLabs\SparkInvite\SparkInvite;
 
 use Auth;
 use Event;

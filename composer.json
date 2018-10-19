@@ -1,18 +1,14 @@
 {
-    "name": "zinethq/spark-invite",
+    "name": "centrality-labs/spark-invite",
     "description": "User invitation system for Laravel Spark",
-    "keywords": ["team", "user", "laravel", "spark", "invite", "zinethq"],
+    "keywords": ["team", "user", "laravel", "spark", "invite", "centrality-labs"],
     "license": "MIT",
     "authors": [{
             "name": "Jon Nicholson",
-            "email": "jon.nicholson@zinethq.com",
-            "homepage": "http://www.drjonnicholson.com",
             "role": "Developer"
         },
         {
             "name": "Ian Tasker",
-            "email": "ian.tasker@zinethq.com",
-            "homepage": "http://www.zinethq.com",
             "role": "Developer"
         }
     ],
@@ -26,7 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "ZiNETHQ\\SparkInvite\\": "src/"
+            "CentralityLabs\\SparkInvite\\": "src/"
         }
     },
     "extra": {

@@ -1,11 +1,11 @@
 <?php
 
-namespace ZiNETHQ\SparkInvite\Http\Controllers;
+namespace CentralityLabs\SparkInvite\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use ZiNETHQ\SparkInvite\SparkInvite;
-use ZiNETHQ\SparkInvite\Models\Invitation;
+use CentralityLabs\SparkInvite\SparkInvite;
+use CentralityLabs\SparkInvite\Models\Invitation;
 use Auth;
 
 class InviteController extends Controller

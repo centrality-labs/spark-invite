@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Laravel\Spark\Spark;
 
-use ZiNETHQ\SparkInvite\Models\Invitation;
+use CentralityLabs\SparkInvite\Models\Invitation;
 
 class CreateInvitationStatusTable extends Migration
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace ZiNETHQ\SparkInvite\Traits;
+namespace CentralityLabs\SparkInvite\Traits;
 
-use ZiNETHQ\SparkInvite\Models\Invitation;
-use ZiNETHQ\SparkInvite\SparkInvite;
+use CentralityLabs\SparkInvite\Models\Invitation;
+use CentralityLabs\SparkInvite\SparkInvite;
 use Exception;
 
 trait HasInvites

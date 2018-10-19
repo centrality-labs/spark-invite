@@ -1,11 +1,11 @@
 <?php
 
-namespace ZiNETHQ\SparkInvite\Models;
+namespace CentralityLabs\SparkInvite\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Spark\Spark;
 
-use ZiNETHQ\SparkInvite\SparkInvite;
+use CentralityLabs\SparkInvite\SparkInvite;
 
 class InvitationStatus extends Model
 {

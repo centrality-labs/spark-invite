@@ -1,13 +1,13 @@
 <?php
-namespace ZiNETHQ\SparkInvite;
+namespace CentralityLabs\SparkInvite;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use ZiNETHQ\SparkInvite\Console\Commands\ValidateInvitationsCommand;
+use CentralityLabs\SparkInvite\Console\Commands\ValidateInvitationsCommand;
 
 use Carbon\Carbon;
 
-use ZiNETHQ\SparkInvite\SparkInvite;
+use CentralityLabs\SparkInvite\SparkInvite;
 
 class SparkInviteServiceProvider extends ServiceProvider
 {
@@ -92,7 +92,7 @@ class SparkInviteServiceProvider extends ServiceProvider
     protected function routes()
     {
         Route::group([
-            'namespace'  => 'ZiNETHQ\SparkInvite\Http\Controllers',
+            'namespace'  => 'CentralityLabs\SparkInvite\Http\Controllers',
             'as' => config('sparkinvite.routes.prefix'),
             'middleware' => config('sparkinvite.routes.middleware'),
         ], function ($router) {

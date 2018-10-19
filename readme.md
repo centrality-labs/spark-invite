@@ -15,7 +15,7 @@ For example, within a system bulk creation of new user accounts may be required 
 1. Require in the package
 
     ```bash
-    composer require zinethq/spark-invite dev-master
+    composer require centrality-labs/spark-invite dev-master
     ```
 
 1. Edit `config\app.php` to have:
@@ -24,13 +24,13 @@ For example, within a system bulk creation of new user accounts may be required 
     ...
     'providers' => [
         ...
-        ZiNETHQ\SparkInvite\SparkInviteServiceProvider::class,
+        CentralityLabs\SparkInvite\SparkInviteServiceProvider::class,
         ...
     ],
     ...
     'aliases' => [
         ...
-        'SparkInvite' => ZiNETHQ\SparkInvite\Facades\SparkInvite::class,
+        'SparkInvite' => CentralityLabs\SparkInvite\Facades\SparkInvite::class,
         ...
     ],
     ...
@@ -39,7 +39,7 @@ For example, within a system bulk creation of new user accounts may be required 
 1. Run the command:
 
     ```php
-    php artisan vendor:publish --provider="ZiNETHQ\SparkInvite\SparkInviteServiceProvider"
+    php artisan vendor:publish --provider="CentralityLabs\SparkInvite\SparkInviteServiceProvider"
     ```
 
     This will publish the following files:
